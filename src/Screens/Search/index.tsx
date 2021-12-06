@@ -5,8 +5,9 @@ import { AxiosResponse } from "axios";
 import ResultGrid from "../../Components/ResultsGrid";
 import { ImageResponse } from "../../interface";
 import { getSearchHistory, storeSearchHistory } from "../../Helpers/storage";
+import { SearchScreenProps } from "./interface";
 
-const SearchScreen = () => {
+const SearchScreen: React.FC<SearchScreenProps> = () => {
   const [results, setResults] = useState<ImageResponse[] | any>(null);
   const [hasError, setHasError] = useState<boolean>(false);
   const [userInput, setUserInput] = useState<string>("");

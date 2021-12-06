@@ -1,6 +1,7 @@
 .container{
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     flex-grow: 0;
     background-color: silver;
     // height: 100vh;

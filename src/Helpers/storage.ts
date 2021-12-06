@@ -1,6 +1,4 @@
-enum localStorageKeys {
-  storedSearchQueries = "storedSearchQueries",
-}
+import { localStorageKeys } from "../interface";
 
 export const storeSearchHistory = (searchQuery: string) => {
   const { storedSearchQueries } = localStorageKeys;
