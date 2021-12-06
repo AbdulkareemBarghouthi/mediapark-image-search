@@ -6,15 +6,44 @@
     .grid-item {
         height: 300px;
         width: 300px;
-        border: solid 1px black;
+        border: solid 1px olive;
         border-radius: 10px;
         margin: 10px;
 
         .grid-image {
-            height: 75%;
+            height: 76%;
             width: 100%;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
+        }
+
+        .grid-controls {
+            width: 100%;
+            height: auto;
+            height: 24%;
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            .like-dislike-button {
+                width: 50px;
+                height: 50px;
+                background-color: orange;
+                border-radius: 25px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: all 1s all;
+                cursor: pointer;
+                &:hover{
+                    background-color: white;
+                }
+
+                img {
+                    width: 23px;
+                }
+            }
         }
     }
 }

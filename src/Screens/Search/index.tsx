@@ -7,13 +7,13 @@ import { ImageResponse } from "../../interface";
 import { getSearchHistory, storeSearchHistory } from "../../Helpers/storage";
 import { SearchScreenProps } from "./interface";
 
-const SearchScreen: React.FC<SearchScreenProps> = () => {
+const SearchScreen: React.FC<SearchScreenProps> = ({ isUserLoggedIn }) => {
   const [results, setResults] = useState<ImageResponse[] | any>(null);
   const [hasError, setHasError] = useState<boolean>(false);
   const [userInput, setUserInput] = useState<string>("");
   const [searchHistory, setSearchHistory] = useState<string[]>();
-  const [inputFocused, setInputFocused] = useState<boolean>(false);
   const [showAutocomplete, setShowAutocomplete] = useState<boolean>();
+  const [currentSearch, setCurrentSearch] = useState<string>("");
 
   const searchImage = async (e: any, searchQuery?: string) => {
     try {
@@ -22,6 +22,7 @@ const SearchScreen: React.FC<SearchScreenProps> = () => {
       );
       setResults(response.data.results);
       setShowAutocomplete(false);
+      setCurrentSearch(searchQuery || userInput)
     } catch (error) {
       setHasError(true);
       console.log(error);
@@ -35,9 +36,8 @@ const SearchScreen: React.FC<SearchScreenProps> = () => {
   };
 
   const onInputFocus = (e: React.FormEvent<HTMLInputElement>) => {
-    setInputFocused(true);
     setShowAutocomplete(true);
-    
+
     const storedSearchHistory: string[] = getSearchHistory();
 
     if (storedSearchHistory) {
@@ -46,7 +46,7 @@ const SearchScreen: React.FC<SearchScreenProps> = () => {
   };
 
   const hideAutocomplete = () => {
-    setInputFocused(false);
+    setShowAutocomplete(false);
   };
 
   const onAutocompleteClick = (item: string) => {
@@ -55,19 +55,28 @@ const SearchScreen: React.FC<SearchScreenProps> = () => {
     setShowAutocomplete(false);
   };
 
+  const refreshSearch = () =>{
+    searchImage(currentSearch);
+  }
 
   return (
     <div className={styles.container}>
       <h1>Search for your desired image</h1>
 
       <div className={styles["search-bar"]}>
-        <input
-          onFocus={onInputFocus}
-          onChange={onInputChange}
-          value={userInput}
-          placeholder="Type in doggo, cat, etc..."
-          type="text"
-        />
+        <div className={styles["search-bar-field-container"]}>
+          <input
+            onFocus={onInputFocus}
+            onChange={onInputChange}
+            value={userInput}
+            placeholder="Type in doggo, cat, etc..."
+            type="text"
+          />
+
+          <div onClick={searchImage} className={styles["search-button"]}>
+            Search
+          </div>
+        </div>
         {searchHistory && (
           <div
             className={`${styles["search-autocomplete"]} ${
@@ -92,18 +101,16 @@ const SearchScreen: React.FC<SearchScreenProps> = () => {
             ))}
           </div>
         )}
-
-        <div onClick={searchImage} className={styles["search-button"]}>
-          Search
-        </div>
       </div>
 
       {hasError ? (
-        <p>Sorry, something went wrong. try again or visit in a later time</p>
+        <p className={styles["error-message"]}>
+          Sorry, something went wrong. try again or visit in a later time
+        </p>
       ) : (
-        <ResultGrid images={results} />
+        <ResultGrid images={results} isUserLoggedIn={isUserLoggedIn} onUserLikeOrDislike={refreshSearch}/>
       )}
-    </div>
+    </div> 
   );
 };
 

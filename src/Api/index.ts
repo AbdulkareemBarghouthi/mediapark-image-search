@@ -1,6 +1,6 @@
-import Axios, { AxiosRequestConfig } from "axios";
+import Axios from "axios";
+import { getUser } from "../Helpers/auth";
 
-const baseUrl: string = "https://api.unsplash.com/";
 
 Axios.interceptors.response.use(
   function (response) {
@@ -13,10 +13,13 @@ Axios.interceptors.response.use(
 
 Axios.interceptors.request.use(
   function (request) {
-    request.baseURL = baseUrl;
+    request.baseURL = process.env.REACT_APP_BASE_URL;
+
+    const user = getUser();
 
     request.headers = {
-        Authorization:'Client-ID 3yPcxQbHhIxobeWxe799ZVHjNfafXazpsJdpCIa38pU'
+        Authorization: user? `${user.token_type} ${user.access_token}` :'Client-ID 3yPcxQbHhIxobeWxe799ZVHjNfafXazpsJdpCIa38pU'
+
     }
     return request;
   },
