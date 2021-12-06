@@ -18,3 +18,16 @@ export interface ImageResponse {
     id: string;
     alt_description: string;
 }
+
+export interface userObject {
+    access_token: string;
+    name?: string;
+    refresh_token?: string;
+    scope?: string;
+    token_type: string
+}
+
+export enum localStorageKeys {
+    user = 'user',
+    storedSearchQueries = "storedSearchQueries",
+}
