@@ -1,14 +1,17 @@
 import Axios from "../Api";
 import { localStorageKeys, userObject } from "../interface";
-const accessToken = "3yPcxQbHhIxobeWxe799ZVHjNfafXazpsJdpCIa38pU";
-const redirect_uri = "http://localhost:3000/callback";
+
+const access_token = process.env.REACT_APP_ACCESS_TOKEN;
+const redirect_uri = process.env.REACT_APP_REDIRECT_URI;
+const client_secret = process.env.REACT_APP_CLIENT_SECRET;
 
 export const login = () => {
-  window.location.href = `https://unsplash.com/oauth/authorize?client_id=${accessToken}&redirect_uri=${redirect_uri}&response_type=code`;
+  window.location.href = `https://unsplash.com/oauth/authorize?client_id=${access_token}&redirect_uri=${redirect_uri}&response_type=code&scope=public+write_likes`;
 };
 
 export const logout = () => {
   localStorage.removeItem(localStorageKeys.user);
+  window.location.reload();
 };
 
 export const getUser = (): userObject | null => {
@@ -29,18 +32,20 @@ export const handleAuthRedirect = () => {
       "code"
     );
 
-    if (document.location.pathname !== "/callback" || !codeQueryParam) return;
+    if (!codeQueryParam) return;
 
     try {
       const response = await Axios.post("https://unsplash.com/oauth/token", {
-        client_id: accessToken,
-        client_secret: "G6ivmboq2B5nUX8c5Ye68S6NmYYeOQslQ0nz_2_hRSo",
+        client_id: access_token,
+        client_secret: client_secret,
         redirect_uri: redirect_uri,
         code: codeQueryParam,
         grant_type: "authorization_code",
+
       });
 
       if (response.status === 200) {
+        console.log(response)
         setUser(response.data as any);
         resolve(response.data);
       }

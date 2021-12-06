@@ -17,6 +17,8 @@ export interface ImageResponse {
     color: string;
     id: string;
     alt_description: string;
+    liked_by_user: boolean;
+    likes: number;
 }
 
 export interface userObject {
